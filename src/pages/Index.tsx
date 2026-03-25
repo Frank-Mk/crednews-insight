@@ -6,41 +6,52 @@ import ResultsSection from "@/components/ResultsSection";
 import HowItWorks from "@/components/HowItWorks";
 import Footer from "@/components/Footer";
 import type { Verdict } from "@/components/VerdictCard";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
-// Mock result for demo
-const mockClaims = [
-  {
-    text: "Global temperatures have risen by 1.1°C since pre-industrial times",
-    verdict: "true" as Verdict,
-    explanation:
-      "According to NASA, NOAA, and the IPCC Sixth Assessment Report, the global average temperature has risen approximately 1.1°C above pre-industrial levels as of 2023.",
-  },
-  {
-    text: "The Arctic will be completely ice-free by 2025",
-    verdict: "false" as Verdict,
-    explanation:
-      "While Arctic sea ice is declining, no major scientific body projects a completely ice-free Arctic by 2025. Most models project ice-free summers could occur by the 2040s–2050s.",
-  },
-  {
-    text: "Renewable energy now accounts for 30% of global electricity",
-    verdict: "mixed" as Verdict,
-    explanation:
-      "Renewables generated approximately 29-30% of global electricity in 2023 according to the IEA, but this figure varies by region and includes hydropower, which some definitions exclude.",
-  },
-];
+interface FactCheckResult {
+  overallScore: number;
+  summary: string;
+  claims: {
+    text: string;
+    verdict: Verdict;
+    explanation: string;
+  }[];
+}
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [showResults, setShowResults] = useState(false);
+  const [result, setResult] = useState<FactCheckResult | null>(null);
+  const { toast } = useToast();
 
-  const handleSubmit = (_text: string) => {
+  const handleSubmit = async (text: string, mode: "text" | "link") => {
     setIsLoading(true);
-    setShowResults(false);
-    // Simulate AI processing
-    setTimeout(() => {
+    setResult(null);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("fact-check", {
+        body: { content: text, mode },
+      });
+
+      if (error) {
+        throw new Error(error.message || "Failed to fact-check");
+      }
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      setResult(data);
+    } catch (err: any) {
+      console.error("Fact-check error:", err);
+      toast({
+        title: "Fact-check failed",
+        description: err.message || "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-      setShowResults(true);
-    }, 2000);
+    }
   };
 
   return (
@@ -48,8 +59,12 @@ const Index = () => {
       <Header />
       <HeroSection />
       <FactCheckInput onSubmit={handleSubmit} isLoading={isLoading} />
-      {showResults && (
-        <ResultsSection claims={mockClaims} overallScore={62} />
+      {result && (
+        <ResultsSection
+          claims={result.claims}
+          overallScore={result.overallScore}
+          summary={result.summary}
+        />
       )}
       <HowItWorks />
       <Footer />
