@@ -47,6 +47,11 @@ const ResultsSection = ({ claims, overallScore, summary }: ResultsSectionProps) 
         <p className={`mt-2 text-sm font-semibold font-body ${scoreInfo.color}`}>
           {scoreInfo.label}
         </p>
+        {summary && (
+          <p className="mt-3 text-sm text-muted-foreground font-body max-w-lg mx-auto leading-relaxed">
+            {summary}
+          </p>
+        )}
       </motion.div>
 
       {/* Claims breakdown */}
