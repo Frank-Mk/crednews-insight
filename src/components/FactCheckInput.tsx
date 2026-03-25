@@ -4,7 +4,7 @@ import { ArrowRight, Link2, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface FactCheckInputProps {
-  onSubmit: (text: string) => void;
+  onSubmit: (text: string, mode: "text" | "link") => void;
   isLoading: boolean;
 }
 
@@ -14,7 +14,7 @@ const FactCheckInput = ({ onSubmit, isLoading }: FactCheckInputProps) => {
 
   const handleSubmit = () => {
     if (input.trim()) {
-      onSubmit(input.trim());
+      onSubmit(input.trim(), mode);
     }
   };
 

@@ -11,6 +11,7 @@ interface Claim {
 interface ResultsSectionProps {
   claims: Claim[];
   overallScore: number;
+  summary?: string;
 }
 
 const getScoreLabel = (score: number) => {
@@ -19,7 +20,7 @@ const getScoreLabel = (score: number) => {
   return { label: "Low Credibility", color: "text-verdict-false" };
 };
 
-const ResultsSection = ({ claims, overallScore }: ResultsSectionProps) => {
+const ResultsSection = ({ claims, overallScore, summary }: ResultsSectionProps) => {
   const scoreInfo = getScoreLabel(overallScore);
 
   return (
