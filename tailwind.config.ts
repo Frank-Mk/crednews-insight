@@ -13,7 +13,23 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        display: ['Playfair Display', 'Georgia', 'serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
+      },
       colors: {
+        ink: "hsl(var(--ink))",
+        cream: {
+          DEFAULT: "hsl(var(--cream))",
+          dark: "hsl(var(--cream-dark))",
+        },
+        gold: "hsl(var(--gold))",
+        verdict: {
+          true: "hsl(var(--verdict-true))",
+          false: "hsl(var(--verdict-false))",
+          mixed: "hsl(var(--verdict-mixed))",
+          unverified: "hsl(var(--verdict-unverified))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
