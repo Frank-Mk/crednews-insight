@@ -7,6 +7,7 @@ import HowItWorks from "@/components/HowItWorks";
 import Footer from "@/components/Footer";
 import type { Verdict } from "@/components/VerdictCard";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 interface FactCheckResult {
