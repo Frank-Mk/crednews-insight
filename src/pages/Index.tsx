@@ -7,6 +7,7 @@ import HowItWorks from "@/components/HowItWorks";
 import Footer from "@/components/Footer";
 import type { Verdict } from "@/components/VerdictCard";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 interface FactCheckResult {
@@ -22,6 +23,7 @@ interface FactCheckResult {
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<FactCheckResult | null>(null);
+  const { user } = useAuth();
   const { toast } = useToast();
 
   const handleSubmit = async (text: string, mode: "text" | "link") => {
@@ -42,6 +44,19 @@ const Index = () => {
       }
 
       setResult(data);
+
+      // Save to history if user is logged in
+      if (user) {
+        const { error: saveError } = await supabase.from("fact_checks").insert({
+          user_id: user.id,
+          content: text,
+          mode,
+          overall_score: data.overallScore,
+          summary: data.summary,
+          claims: data.claims,
+        });
+        if (saveError) console.error("Failed to save fact-check:", saveError);
+      }
     } catch (err: any) {
       console.error("Fact-check error:", err);
       toast({

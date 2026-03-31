@@ -1,4 +1,4 @@
-import { Shield, LogOut, UserCircle } from "lucide-react";
+import { Shield, LogOut, UserCircle, Clock } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,15 @@ const Header = () => {
             <>
               {user ? (
                 <div className="flex items-center gap-3">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigate("/history")}
+                    className="gap-1.5 text-muted-foreground hover:text-foreground"
+                  >
+                    <Clock className="w-4 h-4" />
+                    <span className="hidden sm:inline">History</span>
+                  </Button>
                   <span className="hidden sm:inline text-sm text-muted-foreground truncate max-w-[160px]">
                     {user.email}
                   </span>
