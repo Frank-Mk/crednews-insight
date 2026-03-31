@@ -44,6 +44,19 @@ const Index = () => {
       }
 
       setResult(data);
+
+      // Save to history if user is logged in
+      if (user) {
+        const { error: saveError } = await supabase.from("fact_checks").insert({
+          user_id: user.id,
+          content: text,
+          mode,
+          overall_score: data.overallScore,
+          summary: data.summary,
+          claims: data.claims,
+        });
+        if (saveError) console.error("Failed to save fact-check:", saveError);
+      }
     } catch (err: any) {
       console.error("Fact-check error:", err);
       toast({
