@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      fact_checks: {
+        Row: {
+          claims: Json
+          content: string
+          created_at: string
+          id: string
+          mode: string
+          overall_score: number
+          summary: string | null
+          user_id: string
+        }
+        Insert: {
+          claims?: Json
+          content: string
+          created_at?: string
+          id?: string
+          mode?: string
+          overall_score: number
+          summary?: string | null
+          user_id: string
+        }
+        Update: {
+          claims?: Json
+          content?: string
+          created_at?: string
+          id?: string
+          mode?: string
+          overall_score?: number
+          summary?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
