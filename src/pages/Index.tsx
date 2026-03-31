@@ -23,6 +23,7 @@ interface FactCheckResult {
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<FactCheckResult | null>(null);
+  const { user } = useAuth();
   const { toast } = useToast();
 
   const handleSubmit = async (text: string, mode: "text" | "link") => {
