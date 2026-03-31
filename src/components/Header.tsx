@@ -4,6 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
   const { user, loading, signOut } = useAuth();
@@ -49,19 +55,24 @@ const Header = () => {
                     <Clock className="w-4 h-4" />
                     <span className="hidden sm:inline">History</span>
                   </Button>
-                  <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <UserCircle className="w-4 h-4" />
-                    <span className="hidden sm:inline truncate max-w-[120px]">{displayName}</span>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={signOut}
-                    className="gap-1.5 text-muted-foreground hover:text-foreground"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    <span className="hidden sm:inline">Sign out</span>
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="gap-1.5 text-muted-foreground hover:text-foreground"
+                      >
+                        <UserCircle className="w-4 h-4" />
+                        <span className="hidden sm:inline truncate max-w-[120px]">{displayName}</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={signOut} className="gap-2 cursor-pointer">
+                        <LogOut className="w-4 h-4" />
+                        Sign out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               ) : (
                 <Button
