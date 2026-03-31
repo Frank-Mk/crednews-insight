@@ -1,4 +1,4 @@
-import { Shield, LogOut, UserCircle } from "lucide-react";
+import { Shield, LogOut, UserCircle, Clock } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
