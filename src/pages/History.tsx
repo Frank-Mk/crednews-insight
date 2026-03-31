@@ -53,7 +53,7 @@ const History = () => {
     if (error) {
       console.error("Failed to fetch history:", error);
     } else {
-      setChecks((data as FactCheck[]) || []);
+      setChecks((data as unknown as FactCheck[]) || []);
     }
     setLoading(false);
   };
