@@ -1,11 +1,26 @@
 import { Shield, LogOut, UserCircle, Clock } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 const Header = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  const [displayName, setDisplayName] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("id", user.id)
+      .single()
+      .then(({ data }) => {
+        setDisplayName(data?.display_name || user.email?.split("@")[0] || "User");
+      });
+  }, [user]);
 
   return (
     <header className="border-b border-border">
@@ -34,9 +49,10 @@ const Header = () => {
                     <Clock className="w-4 h-4" />
                     <span className="hidden sm:inline">History</span>
                   </Button>
-                  <span className="hidden sm:inline text-sm text-muted-foreground truncate max-w-[160px]">
-                    {user.email}
-                  </span>
+                  <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <UserCircle className="w-4 h-4" />
+                    <span className="hidden sm:inline truncate max-w-[120px]">{displayName}</span>
+                  </div>
                   <Button
                     variant="ghost"
                     size="sm"
