@@ -22,6 +22,7 @@ export type Database = {
           id: string
           mode: string
           overall_score: number
+          share_id: string | null
           summary: string | null
           user_id: string
         }
@@ -32,6 +33,7 @@ export type Database = {
           id?: string
           mode?: string
           overall_score: number
+          share_id?: string | null
           summary?: string | null
           user_id: string
         }
@@ -42,6 +44,7 @@ export type Database = {
           id?: string
           mode?: string
           overall_score?: number
+          share_id?: string | null
           summary?: string | null
           user_id?: string
         }
