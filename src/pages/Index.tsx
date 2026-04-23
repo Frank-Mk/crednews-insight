@@ -23,12 +23,14 @@ interface FactCheckResult {
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<FactCheckResult | null>(null);
+  const [factCheckId, setFactCheckId] = useState<string | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
 
   const handleSubmit = async (text: string, mode: "text" | "link") => {
     setIsLoading(true);
     setResult(null);
+    setFactCheckId(null);
 
     try {
       const { data, error } = await supabase.functions.invoke("fact-check", {
@@ -47,15 +49,23 @@ const Index = () => {
 
       // Save to history if user is logged in
       if (user) {
-        const { error: saveError } = await supabase.from("fact_checks").insert({
-          user_id: user.id,
-          content: text,
-          mode,
-          overall_score: data.overallScore,
-          summary: data.summary,
-          claims: data.claims,
-        });
-        if (saveError) console.error("Failed to save fact-check:", saveError);
+        const { data: inserted, error: saveError } = await supabase
+          .from("fact_checks")
+          .insert({
+            user_id: user.id,
+            content: text,
+            mode,
+            overall_score: data.overallScore,
+            summary: data.summary,
+            claims: data.claims,
+          })
+          .select("id")
+          .single();
+        if (saveError) {
+          console.error("Failed to save fact-check:", saveError);
+        } else if (inserted) {
+          setFactCheckId(inserted.id);
+        }
       }
     } catch (err: any) {
       console.error("Fact-check error:", err);
@@ -79,6 +89,7 @@ const Index = () => {
           claims={result.claims}
           overallScore={result.overallScore}
           summary={result.summary}
+          factCheckId={factCheckId}
         />
       )}
       <HowItWorks />
