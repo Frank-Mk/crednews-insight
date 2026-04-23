@@ -5,10 +5,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Shield, Trash2, ArrowLeft, Clock } from "lucide-react";
+import { Shield, Trash2, ArrowLeft, Clock, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import VerdictCard, { type Verdict } from "@/components/VerdictCard";
 import { useToast } from "@/hooks/use-toast";
+import { ensureShareLink } from "@/lib/share";
 
 interface FactCheck {
   id: string;
@@ -33,6 +34,7 @@ const History = () => {
   const [checks, setChecks] = useState<FactCheck[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [sharedId, setSharedId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -65,6 +67,18 @@ const History = () => {
     } else {
       setChecks((prev) => prev.filter((c) => c.id !== id));
       if (expandedId === id) setExpandedId(null);
+    }
+  };
+
+  const handleShare = async (id: string) => {
+    try {
+      const url = await ensureShareLink(id);
+      await navigator.clipboard.writeText(url);
+      setSharedId(id);
+      toast({ title: "Share link copied", description: url });
+      setTimeout(() => setSharedId((curr) => (curr === id ? null : curr)), 2000);
+    } catch (err: any) {
+      toast({ title: "Could not create link", description: err.message, variant: "destructive" });
     }
   };
 
@@ -164,7 +178,20 @@ const History = () => {
                           <VerdictCard key={i} claim={claim} index={i} />
                         ))}
                       </div>
-                      <div className="mt-4 flex justify-end">
+                      <div className="mt-4 flex justify-end gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleShare(check.id)}
+                          className="gap-1.5 text-muted-foreground hover:text-foreground"
+                        >
+                          {sharedId === check.id ? (
+                            <Check className="w-4 h-4" />
+                          ) : (
+                            <Share2 className="w-4 h-4" />
+                          )}
+                          {sharedId === check.id ? "Copied" : "Share"}
+                        </Button>
                         <Button
                           variant="ghost"
                           size="sm"
