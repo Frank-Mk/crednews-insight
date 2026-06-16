@@ -73,7 +73,7 @@ const Report = () => {
           <Link to="/" className="flex items-center gap-2.5">
             <Shield className="w-7 h-7 text-foreground" strokeWidth={2.5} />
             <span className="font-display text-2xl font-bold tracking-tight text-foreground">
-              CredNews
+              VeriFact Ai
             </span>
           </Link>
           <Link
