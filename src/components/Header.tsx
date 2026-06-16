@@ -1,6 +1,6 @@
 import { Shield, LogOut, UserCircle, Clock } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,12 +31,12 @@ const Header = () => {
   return (
     <header className="border-b border-border">
       <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
+        <Link to="/" className="flex items-center gap-2.5">
           <Shield className="w-7 h-7 text-foreground" strokeWidth={2.5} />
           <span className="font-display text-2xl font-bold tracking-tight text-foreground">
             CredNews
           </span>
-        </div>
+        </Link>
         <div className="flex items-center gap-6">
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
             <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
