@@ -8,6 +8,7 @@ import FactCheckInput from "@/components/FactCheckInput";
 import ResultsSection from "@/components/ResultsSection";
 import HowItWorks from "@/components/HowItWorks";
 import Footer from "@/components/Footer";
+import ProcessingStatus from "@/components/ProcessingStatus";
 import { Button } from "@/components/ui/button";
 import type { Verdict } from "@/components/VerdictCard";
 import { supabase } from "@/integrations/supabase/client";
@@ -27,6 +28,7 @@ interface FactCheckResult {
     text: string;
     verdict: Verdict;
     explanation: string;
+    sources?: { title: string; url: string }[];
   }[];
 }
 
