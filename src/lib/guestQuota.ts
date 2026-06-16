@@ -11,7 +11,7 @@ interface QuotaState {
   link: number;
 }
 
-const KEY = "crednews:guest-quota";
+const KEY = "verifact:guest-quota";
 
 const todayKey = () => {
   const d = new Date();

@@ -17,7 +17,7 @@ const Landing = () => {
           <Link to="/" className="flex items-center gap-2.5">
             <Shield className="w-7 h-7 text-foreground" strokeWidth={2.5} />
             <span className="font-display text-2xl font-bold tracking-tight text-foreground">
-              CredNews
+              VeriFact Ai
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
@@ -65,7 +65,7 @@ const Landing = () => {
           transition={{ duration: 0.5, delay: 0.25 }}
           className="mt-6 text-lg text-muted-foreground font-body max-w-2xl mx-auto leading-relaxed"
         >
-          Paste any news article, link, or claim. CredNews cross-checks it against trusted
+          Paste any news article, link, or claim. VeriFact Ai cross-checks it against trusted
           sources and returns a credibility score with a claim-by-claim breakdown — in seconds.
         </motion.p>
         <motion.div
@@ -125,7 +125,7 @@ const Landing = () => {
           Free for everyone
         </h2>
         <p className="text-muted-foreground font-body text-center max-w-xl mx-auto mb-12">
-          Try CredNews instantly. Create an account to save your history and remove daily limits.
+          Try VeriFact Ai instantly. Create an account to save your history and remove daily limits.
         </p>
         <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
           <div className="bg-card border border-border rounded-xl p-8">

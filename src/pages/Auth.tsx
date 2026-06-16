@@ -66,7 +66,7 @@ const Auth = () => {
           <a href="/" className="flex items-center gap-2.5">
             <Shield className="w-7 h-7 text-foreground" strokeWidth={2.5} />
             <span className="font-display text-2xl font-bold tracking-tight text-foreground">
-              CredNews
+              VeriFact Ai
             </span>
           </a>
           <Button variant="ghost" size="sm" onClick={() => navigate("/")} className="gap-1.5 text-muted-foreground">
@@ -82,7 +82,7 @@ const Auth = () => {
         <div className="w-full max-w-md">
           <div className="text-center mb-10">
             <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-              {isLogin ? "Welcome back" : "Join CredNews"}
+              {isLogin ? "Welcome back" : "Join VeriFact Ai"}
             </h1>
             <p className="text-muted-foreground">
               {isLogin

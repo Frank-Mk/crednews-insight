@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-muted-foreground" />
-            <span className="font-display text-lg font-bold text-foreground">CredNews</span>
+            <span className="font-display text-lg font-bold text-foreground">VeriFact Ai</span>
           </div>
           <p className="text-xs text-muted-foreground font-body">
             AI-assisted fact checking. Always verify critical information with primary sources.
