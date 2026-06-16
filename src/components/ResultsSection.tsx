@@ -10,6 +10,7 @@ interface Claim {
   text: string;
   verdict: Verdict;
   explanation: string;
+  sources?: { title: string; url: string }[];
 }
 
 interface ResultsSectionProps {

@@ -160,6 +160,8 @@ const Index = () => {
         <FactCheckInput onSubmit={handleSubmit} isLoading={isLoading} />
       )}
 
+      <ProcessingStatus active={isLoading} />
+
       {result && (
         <ResultsSection
           claims={result.claims}
