@@ -26,22 +26,23 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const systemPrompt = `You are CredNews, an expert AI fact-checker. Your job is to analyze text or article content and extract individual claims, then evaluate each claim for truthfulness.
+    const systemPrompt = `You are VeriFact Ai, an expert AI fact-checker. Your job is to analyze text or article content, extract individual factual claims, evaluate each claim against reliable sources, and provide references.
 
-For each claim you identify, provide:
+For each claim provide:
 1. The exact claim text (quoted from the source)
 2. A verdict: "true", "false", "mixed", or "unverified"
-3. A brief explanation (2-3 sentences) citing why you reached that verdict
+3. A 2-3 sentence explanation citing reasoning
+4. A list of 2-4 reliable reference sources (real, well-known reputable outlets/organizations such as Reuters, AP News, BBC, NYT, WHO, CDC, NASA, Nature, Snopes, PolitiFact, FactCheck.org, peer-reviewed journals, official government/agency pages). Each source must have a "title" and a real working "url". Do NOT invent URLs — if you are not sure a specific page exists, link to the outlet's homepage or a high-level topic page that genuinely exists.
 
-Also provide an overall credibility score from 0-100 where:
-- 80-100: Highly credible, mostly verified facts
-- 50-79: Mixed credibility, some claims unverified or misleading
-- 0-49: Low credibility, contains significant false or misleading claims
+Also provide an overall credibility score 0-100:
+- 80-100: Highly credible
+- 50-79: Mixed credibility
+- 0-49: Low credibility
 
-Be fair, balanced, and base your analysis on widely accepted scientific consensus, verified data, and reputable sources.`;
+Be fair, balanced, and base analysis on widely accepted evidence and reputable sources.`;
 
     const userPrompt = mode === "link"
-      ? `Analyze the following URL for factual claims. Since you cannot browse URLs, analyze the URL itself and any context clues, then provide your best assessment. URL: ${content}`
+      ? `Analyze the following URL for factual claims. Use your knowledge of the source and topic. URL: ${content}`
       : `Analyze the following text for factual claims and fact-check each one:\n\n${content}`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -61,38 +62,35 @@ Be fair, balanced, and base your analysis on widely accepted scientific consensu
             type: "function",
             function: {
               name: "fact_check_result",
-              description: "Return structured fact-check results with claims and overall score",
+              description: "Return structured fact-check results with claims, sources, and overall score",
               parameters: {
                 type: "object",
                 properties: {
-                  overallScore: {
-                    type: "number",
-                    description: "Overall credibility score from 0-100",
-                  },
-                  summary: {
-                    type: "string",
-                    description: "A brief 1-2 sentence summary of the overall analysis",
-                  },
+                  overallScore: { type: "number", description: "0-100 credibility score" },
+                  summary: { type: "string", description: "1-2 sentence summary" },
                   claims: {
                     type: "array",
                     items: {
                       type: "object",
                       properties: {
-                        text: {
-                          type: "string",
-                          description: "The exact claim text from the source",
-                        },
-                        verdict: {
-                          type: "string",
-                          enum: ["true", "false", "mixed", "unverified"],
-                          description: "The verdict for this claim",
-                        },
-                        explanation: {
-                          type: "string",
-                          description: "Brief explanation of why this verdict was reached",
+                        text: { type: "string" },
+                        verdict: { type: "string", enum: ["true", "false", "mixed", "unverified"] },
+                        explanation: { type: "string" },
+                        sources: {
+                          type: "array",
+                          description: "2-4 reliable reference sources for this claim",
+                          items: {
+                            type: "object",
+                            properties: {
+                              title: { type: "string", description: "Source name or article title" },
+                              url: { type: "string", description: "Full URL to a real reputable source" },
+                            },
+                            required: ["title", "url"],
+                            additionalProperties: false,
+                          },
                         },
                       },
-                      required: ["text", "verdict", "explanation"],
+                      required: ["text", "verdict", "explanation", "sources"],
                       additionalProperties: false,
                     },
                   },
